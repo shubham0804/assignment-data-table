@@ -4,56 +4,46 @@ const Table = ({ data, activeSorting, setActiveSorting, className }) => {
     const headers = [
         {
             name: "Name",
+            identifier: "name",
             sort: true,
         },
         {
             name: "Position",
+            identifier: "position",
             sort: true,
         },
         {
             name: "Office",
+            identifier: "office",
             sort: true,
         },
         {
             name: "Age",
+            identifier: "age",
             sort: true,
         },
         {
             name: "Start Date",
+            identifier: "start_date",
             sort: true,
         },
         {
             name: "Salary",
+            identifier: "salary",
             sort: true,
         },
     ];
 
     const onSort = ({ type, value }) => {
-        let updatedSort = activeSorting;
-
-        // // Add if does not exists
-        if (!activeSorting.find((el) => el.type === type && el.value == value)) {
-            // Remove if same value and different type
-            if (activeSorting.find((el) => el.type !== type && el.value === value)) {
-                updatedSort = updatedSort?.filter((el) => el.type === type || el.value !== value);
-            }
-            updatedSort = [
-                ...updatedSort,
-                {
-                    type,
-                    value,
-                },
-            ];
-        } else {
-            // Remove if exists
-            updatedSort = activeSorting?.filter((el) => el.type !== type || el.value !== value);
-        }
-        setActiveSorting(updatedSort);
+        setActiveSorting({
+            type,
+            value,
+        });
     };
 
     return (
         <div className={className}>
-            <table>
+            <table className="w-100">
                 <thead>
                     <tr>
                         {headers.map((header, i) => (
@@ -106,10 +96,10 @@ const Table = ({ data, activeSorting, setActiveSorting, className }) => {
 
 const SortAsc = ({ onSort, activeSorting, header }) => (
     <FaCaretUp
-        onClick={() => onSort({ type: "asc", value: header.name })}
+        onClick={() => onSort({ type: "asc", value: header.identifier })}
         className="cursor-pointer"
         color={`${
-            activeSorting.find((el) => el.type == "asc" && el.value == header.name)
+            activeSorting?.type == "asc" && activeSorting?.value == header.identifier
                 ? "#000000"
                 : "#dddddd"
         } `}
@@ -118,10 +108,10 @@ const SortAsc = ({ onSort, activeSorting, header }) => (
 
 const SortDesc = ({ onSort, activeSorting, header }) => (
     <FaCaretDown
-        onClick={() => onSort({ type: "desc", value: header.name })}
+        onClick={() => onSort({ type: "desc", value: header.identifier })}
         className="cursor-pointer"
         color={`${
-            activeSorting?.find((el) => el.type == "desc" && el.value == header.name)
+            activeSorting?.type == "desc" && activeSorting?.value == header.identifier
                 ? "#000000"
                 : "#dddddd"
         }  `}

@@ -6,19 +6,18 @@ export const updateDataTable = ({
     activeSorting,
     setTotalEntries,
 }) => {
-    let filteredData = [];
-
     const searchFilteredData = searchFilter({ data, search });
     setTotalEntries(searchFilteredData.length);
+    const sortedData = sortFilter({ data: searchFilteredData, activeSorting });
     const paginatedData = pagination({
-        data: searchFilteredData,
+        data: sortedData,
         entriesPerPage,
         currentPageNo,
     });
     return paginatedData;
 };
 
-export const searchFilter = ({ data, search }) => {
+const searchFilter = ({ data, search }) => {
     if (!search) {
         return data;
     }
@@ -37,7 +36,26 @@ export const searchFilter = ({ data, search }) => {
     return filteredData;
 };
 
-export const pagination = ({ data, entriesPerPage, currentPageNo }) => {
+const sortFilter = ({ data, activeSorting }) => {
+    if (!activeSorting.type) {
+        return data;
+    }
+    let sortedData = data;
+    const sortOn = activeSorting.value;
+    const sortType = activeSorting.type;
+    sortedData.sort((a, b) => {
+        if (a[sortOn] > b[sortOn]) {
+            return sortType === "asc" ? 1 : -1;
+        }
+        if (a[sortOn] < b[sortOn]) {
+            return sortType === "asc" ? -1 : 1;
+        }
+        return 0;
+    });
+    return sortedData;
+};
+
+const pagination = ({ data, entriesPerPage, currentPageNo }) => {
     const parsedEntriesPerPage = typeof (entriesPerPage == "string")
         ? parseInt(entriesPerPage)
         : entriesPerPage;

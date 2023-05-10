@@ -5,13 +5,13 @@ import Search from "./Search";
 import Table from "./Table";
 import TotalEntriesInfo from "./TotalEntriesInfo";
 import Pagination from "./Pagination";
-import { updateDataTable, searchFilter, pagination } from "../services/dataTable";
+import { updateDataTable } from "../services/dataTable";
 
 const DataTable = ({ data }) => {
     const [updatedData, setUpdatedData] = useState(data);
     const [entriesPerPage, setEntriesPerPage] = useState("10");
     const [search, setSearch] = useState("");
-    const [activeSorting, setActiveSorting] = useState([]);
+    const [activeSorting, setActiveSorting] = useState({});
     const [currentPageNo, setCurrentPageNo] = useState(1);
     const [totalEntries, setTotalEntries] = useState(data.length);
 
@@ -50,7 +50,7 @@ const DataTable = ({ data }) => {
                 data={updatedData}
                 activeSorting={activeSorting}
                 setActiveSorting={setActiveSorting}
-                className="my-3 mb-4"
+                className="my-3 mb-4 w-100"
             />
             <div className="d-flex justify-content-between align-items-center">
                 <TotalEntriesInfo
